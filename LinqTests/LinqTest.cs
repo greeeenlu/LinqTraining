@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LinqSample.YourOwnLinq;
 
 namespace LinqTests
 {
@@ -150,7 +151,8 @@ namespace LinqTests
         public void groupSalary()
         {
             var employees = RepositoryFactory.GetEmployees();
-            var actual = WithoutLinq.YourGroup(employees, 3, e => e.MonthSalary);
+            var actual = YourOwnLinq.YourGroup(employees, 3, e => e.MonthSalary);
+            //var actual = WithoutLinq.YourGroup(employees, 3, e => e.MonthSalary);
 
             var expected = new List<int>()
             {

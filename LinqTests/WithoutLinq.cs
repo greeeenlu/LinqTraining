@@ -1,6 +1,7 @@
 ﻿using LinqTests;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace LinqSample.WithoutLinq
 {
@@ -125,6 +126,59 @@ namespace LinqSample.WithoutLinq
                     yield return enumerator.Current;
                 }
             }
+        }
+
+        public static IEnumerable<int> YourGroup<TSource>(IEnumerable<TSource> sources, int numberOfGroup, Func<TSource, int> func)
+        
+        {
+            var sumOfSalaryForEachGroup = 0;
+            var index = 1;
+            var enumerator = sources.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                sumOfSalaryForEachGroup += func(enumerator.Current);
+                if (index++ % numberOfGroup == 0)
+                {
+                    yield return sumOfSalaryForEachGroup;
+                    sumOfSalaryForEachGroup = 0;
+                }
+
+            }
+
+            if (sumOfSalaryForEachGroup>0)
+            {
+                yield return sumOfSalaryForEachGroup;
+            }
+
+           
+        }
+
+        public static T YourFirst<T>(IEnumerable<T> sources, Func<T, bool> func)
+        {
+            var enumerator = sources.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (func(enumerator.Current))
+                {
+                    return enumerator.Current;
+                }
+            }
+            throw new ArgumentNullException();
+        }
+
+        public static T YourLast<T>(IEnumerable<T> sources, Func<T, bool> func)
+        {
+            var reversedSource = sources.Reverse();
+            var enumerator = reversedSource.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (func(enumerator.Current))
+                {
+                    return enumerator.Current;
+                }
+            }
+
+            throw new ArgumentNullException();
         }
     }
 }
